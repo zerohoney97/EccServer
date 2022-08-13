@@ -100,39 +100,105 @@ database.ref('ECC').once('보조공학').then(function(snapshot){
 
 app.get('/getEccList', (req, res) => {
   res.header("Access-Control-Allow-Origin", "*");
- 
+ let getEccList;
    var EccList=  dbEccList.collection('SubTech');
     const {data}=req.query;
     const dataArray=data.split('/');
-    console.log(dataArray[1]);
+    console.log(dataArray);
     if(parseInt(dataArray[0])===0){
-EccList.find({_id:ObjectId('62cbff16c405696e9086655c')}).toArray((err,res)=>{
+EccList.find({_id:ObjectId('62cbff16c405696e9086655c')}).toArray((err,result)=>{
     switch(parseInt(dataArray[1])){
-        case 0:console.log(res[0].보조공학.책마루);
+        case 0:getEccList= result[0].보조공학.책마루;
         break;
-        case 1:console.log(res[0].보조공학.OCR);  
+        case 1:getEccList=result[0].보조공학.OCR;
         break;     
-        case 2:console.log(res[0].보조공학.데이지플레이어);
+        case 2:getEccList=result[0].보조공학.데이지플레이어
         break;
-        case 4:console.log(res[0].보조공학.스마트기기활용);
+        case 4:getEccList=result[0].보조공학.스마트기기활용
         break;
-        case 5:console.log(res[0].보조공학.스크린리더);
+        case 5:getEccList=result[0].보조공학.스크린리더
         break;
-        case 6:console.log(res[0].보조공학.인터넷활용);
+        case 6:getEccList=result[0].보조공학.인터넷활용
         break;
-        case 7:console.log(res[0].보조공학.전자교재);
+        case 7:getEccList=result[0].보조공학.전자교재
         break;
-        case 8:console.log(res[0].보조공학.컴퓨터및프로그램);
+        case 8:getEccList=result[0].보조공학.컴퓨터및프로그램
         break;
-        case 9:console.log(res[0].보조공학.한글및오피스);
+        case 9:getEccList=result[0].보조공학.한글및오피스
         break;
 
 
 
     }
+    res.send(getEccList);
+    
 })
 
-    } 
+    } else if(parseInt(dataArray[0])===1){
+        EccList.find({_id:ObjectId('62cbffc9c405696e9086a00c')}).toArray((err,result)=>{
+            switch(parseInt(dataArray[1])){
+                case 0:getEccList= result[0].보행.보행체크리스트;
+                
+                break;
+            
+            }
+            res.send(getEccList);
+            
+        })
+    }else if(parseInt(dataArray[0])===3){
+
+        EccList.find({_id:ObjectId('62cc000ec405696e9086b6d5')}).toArray((err,result)=>{
+            switch(parseInt(dataArray[1])){
+                case 0:getEccList= result[0].일상생활기술.책마루;
+                break;
+                case 1:getEccList=result[0].일상생활기술.건강과안전;
+                break;     
+                case 2:getEccList=result[0].일상생활기술.시간관리;
+                break;
+                case 3:getEccList=result[0].일상생활기술.식생활;
+                break;
+                case 4:getEccList=result[0].일상생활기술.신변처리;
+                break;
+                case 5:getEccList=result[0].일상생활기술.의생활 ;
+                break;
+                case 6:getEccList=result[0].일상생활기술.자기주장및보호;
+                break;
+                case 7:getEccList=result[0].일상생활기술.전화기술;
+                break;
+                case 8:getEccList=result[0].일상생활기술.청소기술;
+                break;
+                case 8:getEccList=result[0].일상생활기술.화폐활용;
+                break;
+    
+        
+        
+            }
+            res.send(getEccList);
+            
+        })
+    }else{
+
+        EccList.find({_id:ObjectId('62cbff66c405696e90867f5a')}).toArray((err,result)=>{
+            switch(parseInt(dataArray[1])){
+                case 0:getEccList= result[0].점자.기호점자;
+                break;   
+                case 2:getEccList=result[0].점자.영어점자;
+                break;
+                case 3:getEccList=result[0].점자.점자의기초;
+                break;
+                case 4:getEccList=result[0].점자.촉각훈련;
+                break;
+                case 5:getEccList=result[0].점자.한글점자;
+                break;
+            
+        
+        
+        
+            }
+            res.send(getEccList);
+            
+        })
+    }
 
 
 })
