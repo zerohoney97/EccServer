@@ -24,6 +24,7 @@ MongoClient.connect(connetToZeroHoneyMongoDb,function(err,client){
 var dbAccount=client.db('Account');
 var dbStudent=client.db('Student');
 var dbEccList=client.db('EccList');
+var dbEccEvaluationData=client.db('EccEvaluationData');
 // 각 폼을 불러와주는 쿼리값
 // 리스트를 임시보관할 array
 var tempList;
@@ -270,14 +271,11 @@ res.send(result);
 })
 
 })
-app.get('/user',function(req,res){
-  res.setHeader("Access-Control-Allow-Origin", "*");
-var tempUser={"name":"asd",
-"birth":970204,
-"email":"으헤헤헤이거슨이메일",
-"uid":"유니크다음은 전설"
-}
 
+
+app.post('/user',function(req,res){
+  res.setHeader("Access-Control-Allow-Origin", "*");
+var tempUser='이것은 String 치즈 입니다.'
 res.send(tempUser);
 console.log(tempUser);
 })
@@ -353,6 +351,17 @@ app.post('/addForm', (req, res) => {
 })
 
 
+
+
+app.post('/putPostEccData',(req,res)=>{
+    console.log(req.body);
+    
+// dbEccEvaluationData.collection('SubTech').insertOne({result:req.body.data},function(err,result){
+// if(err) throw err;
+//     console.log('저장 성공')
+// })
+
+})
 
 // ecc데이터 저장 메소드 시작
 app.post('/addScoreOcr', (req, res) => {
