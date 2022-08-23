@@ -354,9 +354,9 @@ app.post('/addForm', (req, res) => {
 
 
 app.post('/putPostEccData',(req,res)=>{
-    console.log(req.body);
-    
-// dbEccEvaluationData.collection('SubTech').insertOne({result:req.body.data},function(err,result){
+    let{data}=req.body;
+    console.log(data);
+// dbEccEvaluationData.collection('SubTech').insertOne({result:req.body},function(err,result){
 // if(err) throw err;
 //     console.log('저장 성공')
 // })
