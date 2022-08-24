@@ -272,6 +272,17 @@ res.send(result);
 
 })
 
+// 학생의 ECC평가 정보를 가져오는 함수
+
+app.get('/getStudentEvaluationData',function(req,res){
+    let{studentData}=req.body;
+dbEccEvaluationData.collection('SubTech').find({uid:studentData}).toArray(function(err,result){
+    if(err) throw err;
+
+res.send(result);})
+
+})
+
 
 app.post('/user',function(req,res){
   res.setHeader("Access-Control-Allow-Origin", "*");
@@ -352,15 +363,27 @@ app.post('/addForm', (req, res) => {
 
 
 
-
+// 사전평가 저장하는 함수
 app.post('/putPostEccData',(req,res)=>{
-    let{data}=req.body;
-    console.log(data);
-// dbEccEvaluationData.collection('SubTech').insertOne({result:req.body},function(err,result){
-// if(err) throw err;
-//     console.log('저장 성공')
-// })
+     let {data,studentEvaluationData,time}=req.body;
+     console.log(req.body);
+console.log(studentEvaluationData);
+console.log(time);
+     setPretestEccDataInMongoDB(data).then(()=>{
+        dbEccEvaluationData.collection('SubTech').insertOne({result:newData,
+        uid:studentEvaluationData,time:time
+    },function(err,result){
+            if(err) throw err;
+                console.log('저장 성공')
+            })
+    
+        data.length=0;
 
+    })
+  
+    
+
+ res.send('성공');
 })
 
 // ecc데이터 저장 메소드 시작
@@ -469,6 +492,10 @@ passport.deserializeUser(function(id,done){
 done(null,{})
 
 });
+
+
+
+
 })
 
 //   원본 passport
@@ -486,3 +513,13 @@ done(null,{})
 //       });
 //     });
 //   }));
+
+
+// 배열 초기화 함수
+async function setPretestEccDataInMongoDB(data){
+    data=data.replace(/,/g,"");
+    newData=data.split('&cutLine');
+
+    console.log(newData);  
+  
+}
