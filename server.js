@@ -266,7 +266,6 @@ app.get('/getStudentListFromDB',function(req,res){
   res.setHeader("Access-Control-Allow-Origin", "*");
 dbStudent.collection('A').find({}).toArray(function(err,result){
     if (err) throw err;
-    console.log(result);
 res.send(result);
 })
 
@@ -275,8 +274,10 @@ res.send(result);
 // 학생의 ECC평가 정보를 가져오는 함수
 
 app.get('/getStudentEvaluationData',function(req,res){
-    let{studentData}=req.body;
-dbEccEvaluationData.collection('SubTech').find({uid:studentData}).toArray(function(err,result){
+    let{studentData}=req.query;
+    console.log(studentData);
+dbEccEvaluationData.collection('SubTech').find({'uid':studentData}).toArray(function(err,result){
+    console.log(result);
     if(err) throw err;
 
 res.send(result);})
@@ -365,13 +366,11 @@ app.post('/addForm', (req, res) => {
 
 // 사전평가 저장하는 함수
 app.post('/putPostEccData',(req,res)=>{
-     let {data,studentEvaluationData,time}=req.body;
-     console.log(req.body);
-console.log(studentEvaluationData);
-console.log(time);
+     let {data,studentEvaluationData,time,category}=req.body;
+console.log(category);
      setPretestEccDataInMongoDB(data).then(()=>{
         dbEccEvaluationData.collection('SubTech').insertOne({result:newData,
-        uid:studentEvaluationData,time:time
+        uid:studentEvaluationData,time:time,category:category
     },function(err,result){
             if(err) throw err;
                 console.log('저장 성공')
