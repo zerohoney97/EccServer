@@ -366,11 +366,10 @@ app.post('/addForm', (req, res) => {
 
 // 사전평가 저장하는 함수
 app.post('/putPostEccData',(req,res)=>{
-     let {data,studentEvaluationData,time,category}=req.body;
-console.log(category);
+     let {data,studentEvaluationData,time,bigCategory,smallCategory}=req.body;
      setPretestEccDataInMongoDB(data).then(()=>{
         dbEccEvaluationData.collection('SubTech').insertOne({result:newData,
-        uid:studentEvaluationData,time:time,category:category
+        uid:studentEvaluationData,time:time,bigCategory:bigCategory,smallCategory:smallCategory
     },function(err,result){
             if(err) throw err;
                 console.log('저장 성공')
