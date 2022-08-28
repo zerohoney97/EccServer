@@ -273,7 +273,7 @@ res.send(result);
 
 // 학생의 ECC평가 정보를 가져오는 함수
 
-app.get('/getStudentEvaluationData',function(req,res){
+app.get('/getStudentPreEvaluationData',function(req,res){
     let{studentData}=req.query;
     console.log(studentData);
 dbEccEvaluationData.collection('SubTech').find({'uid':studentData}).toArray(function(err,result){
