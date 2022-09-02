@@ -365,7 +365,7 @@ app.post('/addForm', (req, res) => {
 
 
 // 사전평가 저장하는 함수
-app.post('/putPostEccData',(req,res)=>{
+app.post('/putPreEccData',(req,res)=>{
      let {data,studentEvaluationData,time,bigCategory,smallCategory}=req.body;
      setPretestEccDataInMongoDB(data).then(()=>{
         dbEccEvaluationData.collection('SubTech').insertOne({result:newData,
@@ -383,6 +383,37 @@ app.post('/putPostEccData',(req,res)=>{
 
  res.send('성공');
 })
+
+// 사전평가 저장하는 함수
+
+// 사후평가 저장하는 함수
+
+
+app.post('/putPostEccData',(req,res)=>{
+    let {data,studentEvaluationData,time,bigCategory,smallCategory}=req.body;
+
+console.log(data.score);
+
+//     setPretestEccDataInMongoDB(data).then(()=>{
+//        dbEccEvaluationData.collection('SubTech').insertOne({result:newData,
+//        uid:studentEvaluationData,time:time,bigCategory:bigCategory,smallCategory:smallCategory
+//    },function(err,result){
+//            if(err) throw err;
+//                console.log('저장 성공')
+//            })
+   
+//        data.length=0;
+
+//    })
+ 
+   
+
+res.send('성공');
+})
+
+
+
+// 사후평가 저장하는 함수
 
 // ecc데이터 저장 메소드 시작
 app.post('/addScoreOcr', (req, res) => {
@@ -515,6 +546,15 @@ done(null,{})
 
 // 배열 초기화 함수
 async function setPretestEccDataInMongoDB(data){
+    data=data.replace(/,/g,"");
+    newData=data.split('&cutLine');
+
+    console.log(newData);  
+  
+}
+
+
+async function setPosttestEccDataInMongoDB(data){
     data=data.replace(/,/g,"");
     newData=data.split('&cutLine');
 
