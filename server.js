@@ -38,14 +38,25 @@ var tempList;
 
 //     })
 
-app.use(express.urlencoded({ extended: true }))
-// var whitelist = ['*']
-// var corsOptions = {  origin: function(origin, callback){  var isWhitelisted = whitelist.indexOf(origin) !== -1; 
-//    callback(null, isWhitelisted);  
-//   //   callback expects two parameters: error and options  
-//    },  credentials:true}
+// express 미들웨어 관리
 
-// app.use(cors(corsOptions),()=>{console.log('미들웨어 성공')});
+
+
+// .urlencoded()은 x-www-form-urlencoded형태의 데이터를
+// .json()은 JSON형태의 데이터를 해석
+
+// json 파일을 qs모듈로 사용
+app.use(express.urlencoded({ extended: true }));
+// json 파일을 qs모듈로 사용
+
+// json 파일 해석
+app.use(express.json());
+// json 파일 해석
+
+
+
+// express 미들웨어 관리
+
 http.createServer((req,res)=>{
   res.setHeader("Access-Control-Allow-Origin", "*");
 })
@@ -53,6 +64,7 @@ app.listen(8080,(req,res)=>{
   
     console.log('성공했구나 이녀석..')
 })
+
 
 // var server=http.createServer(app).listen(8080,function(req,res){
   
@@ -389,27 +401,9 @@ app.post('/putPreEccData',(req,res)=>{
 // 사후평가 저장하는 함수
 
 
-app.post('/putPostEccData',(req,res)=>{
-    let {data,studentEvaluationData,time,bigCategory,smallCategory}=req.body;
-
-console.log(data.score);
-
-//     setPretestEccDataInMongoDB(data).then(()=>{
-//        dbEccEvaluationData.collection('SubTech').insertOne({result:newData,
-//        uid:studentEvaluationData,time:time,bigCategory:bigCategory,smallCategory:smallCategory
-//    },function(err,result){
-//            if(err) throw err;
-//                console.log('저장 성공')
-//            })
-   
-//        data.length=0;
-
-//    })
- 
-   
-
-res.send('성공');
-})
+app.post('/putPostEccData', function(request, response){
+    console.log(request.body);
+});
 
 
 
