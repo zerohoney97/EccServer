@@ -53,8 +53,6 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 // json 파일 해석
 
-
-
 // express 미들웨어 관리
 
 http.createServer((req,res)=>{
@@ -111,10 +109,11 @@ database.ref('ECC').once('보조공학').then(function(snapshot){
 
 })
 
+//  ECC list불러오는 함수
 app.get('/getEccList', (req, res) => {
   res.header("Access-Control-Allow-Origin", "*");
  let getEccList;
-   var EccList=  dbEccList.collection('SubTech');
+   var EccList=  dbEccList.collection('List');
     const {data}=req.query;
     const dataArray=data.split('/');
     console.log(dataArray);
@@ -216,6 +215,9 @@ EccList.find({_id:ObjectId('62cbff16c405696e9086655c')}).toArray((err,result)=>{
 
 })
 
+//  ECC list불러오는 함수
+
+
 app.get('/getOcr', (req, res) => {
     MongoClient.connect('mongodb+srv://ecoco97:e911291!e9@eccproject.7wg6l.mongodb.net/EccSubtech?retryWrites=true&w=majority', function (err, client) {
 
@@ -283,19 +285,36 @@ res.send(result);
 
 })
 
+
+
+
 // 학생의 ECC평가 정보를 가져오는 함수
 
+
+// 사전평가 정보 불러오는 함수
 app.get('/getStudentPreEvaluationData',function(req,res){
     let{studentData}=req.query;
     console.log(studentData);
-dbEccEvaluationData.collection('SubTech').find({'uid':studentData}).toArray(function(err,result){
+dbEccEvaluationData.collection('PreTest').find({'uid':studentData}).toArray(function(err,result){
     console.log(result);
     if(err) throw err;
 
 res.send(result);})
 
 })
+// 사전평가 정보 불러오는 함수
 
+// 가장최신 사전평가를 불러오는 함수
+app.get('/getLastPretestData',function(req,res){
+
+    // projection으로 date만 불러오고 그중 최신값 간추려냄, 그 후에 다시 find로 최근 사전평가를 불러옴
+})
+// 가장최신 사전평가를 불러오는 함수
+
+
+
+
+// 학생의 ECC평가 정보를 가져오는 함수
 
 app.post('/user',function(req,res){
   res.setHeader("Access-Control-Allow-Origin", "*");
@@ -378,18 +397,12 @@ app.post('/addForm', (req, res) => {
 
 // 사전평가 저장하는 함수
 app.post('/putPreEccData',(req,res)=>{
-     let {data,studentEvaluationData,time,bigCategory,smallCategory}=req.body;
-     setPretestEccDataInMongoDB(data).then(()=>{
-        dbEccEvaluationData.collection('SubTech').insertOne({result:newData,
-        uid:studentEvaluationData,time:time,bigCategory:bigCategory,smallCategory:smallCategory
-    },function(err,result){
+        dbEccEvaluationData.collection('PreTest').insertOne(req.body,function(err,result){
             if(err) throw err;
                 console.log('저장 성공')
             })
     
-        data.length=0;
 
-    })
   
     
 
@@ -402,7 +415,12 @@ app.post('/putPreEccData',(req,res)=>{
 
 
 app.post('/putPostEccData', function(request, response){
-    console.log(request.body);
+
+    dbEccEvaluationData.collection('PostTest').insertOne(request.body,function(err,result){
+            if(err) throw err;
+                console.log('저장 성공')
+            })
+    
 });
 
 
