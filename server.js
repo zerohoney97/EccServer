@@ -14,7 +14,7 @@ require('dotenv').config();
 
 let bookFloorList, computerProgramList, daisyList, digitalBookList, hanofficeList, internetList, ocrList, screenReaderList, smartPhoneList;
 let base, engBraille, hangeul, symbol, touch;
-let connetToZeroHoneyMongoDb = 'mongodb+srv://zerohoney:e911291!e9@cluster0.wlnrf.mongodb.net/?retryWrites=true&w=majority';
+let connetToZeroHoneyMongoDb =process.env.DB_URL;
 
 MongoClient.connect(connetToZeroHoneyMongoDb, function (err, client) {
 
@@ -59,7 +59,7 @@ MongoClient.connect(connetToZeroHoneyMongoDb, function (err, client) {
     http.createServer((req, res) => {
         res.setHeader("Access-Control-Allow-Origin", "*");
     })
-    app.listen(8080, (req, res) => {
+    app.listen(process.env.PORT, (req, res) => {
 
         console.log('성공했구나 이녀석..')
     })
