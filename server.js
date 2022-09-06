@@ -16,6 +16,9 @@ let bookFloorList, computerProgramList, daisyList, digitalBookList, hanofficeLis
 let base, engBraille, hangeul, symbol, touch;
 let connetToZeroHoneyMongoDb =process.env.DB_URL;
 
+
+
+// 맥을 실험한다
 MongoClient.connect(connetToZeroHoneyMongoDb, function (err, client) {
 
     //  "proxy": "http://localhost:8080"
