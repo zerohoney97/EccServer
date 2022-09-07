@@ -253,19 +253,7 @@ MongoClient.connect(connetToZeroHoneyMongoDb, function (err, client) {
     // 사후평가 정보 불러오는 함수
 
 
-    // 가장최신 사전평가를 불러오는 함수
-    app.get('/getLastPretestData', function (req, res) {
-
-        getLastDate.getLastDateInPreTest(req, res);
-        // projection으로 date만 불러오고 그중 최신값 간추려냄, 그 후에 다시 find로 최근 사전평가를 불러옴
-    })
-
-
-
-
-    // 가장최신 사전평가를 불러오는 함수
-
-
+ 
 
 
     // 학생의 ECC평가 정보를 가져오는 함수
@@ -277,6 +265,23 @@ MongoClient.connect(connetToZeroHoneyMongoDb, function (err, client) {
     })
 
 
+
+// --------------------------------------외부 통신 ---------------------------------------------------------------------------
+
+app.get('/category/list',function(req,res){
+dbEccList.collection('List').find().toArray(function(err,result){
+
+
+    res.json(result);
+})
+
+})
+// --------------------------------------외부 통신 ---------------------------------------------------------------------------
+
+
+
+
+
     // ECC REST API 통신
     app.get('*', function (req, res) {
         res.sendFile(path.join(__dirname, 'build/index.html'))
@@ -285,6 +290,20 @@ MongoClient.connect(connetToZeroHoneyMongoDb, function (err, client) {
 
 
 // ----------------------------------------------------------------post----------------------------------------------------------------------------------------//
+
+
+   // 가장최신 사전평가를 불러오는 함수
+   app.get('/getLastPretestData', function (req, res) {
+
+    getLastDate.getLastDateInPreTest(req, res);
+    // projection으로 date만 불러오고 그중 최신값 간추려냄, 그 후에 다시 find로 최근 사전평가를 불러옴
+})
+
+
+
+
+// 가장최신 사전평가를 불러오는 함수
+
 
 
   
