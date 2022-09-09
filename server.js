@@ -220,6 +220,14 @@ MongoClient.connect(connetToZeroHoneyMongoDb, function (err, client) {
 
     })
 
+// 선생님들이 관리하는 학생들 명단 불러오기
+app.get('/getStudentInformationByTeacher',function(req,res){
+dbStudent.collection('A').find({'uid':req.body})
+
+    
+})
+// 선생님들이 관리하는 학생들 명단 불러오기
+
 
 
 
