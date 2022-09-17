@@ -295,13 +295,6 @@ MongoClient.connect(connetToZeroHoneyMongoDb, function (err, client) {
     console.log(res);
   });
 
-  // ECC REST API 통신
-  app.get("*", function (req, res) {
-    res.sendFile(path.join(__dirname, "build/index.html"));
-  });
-
-  // ----------------------------------------------------------------post----------------------------------------------------------------------------------------//
-
   // 가장최신 사전평가를 불러오는 함수
   app.get("/getLastPretestData", function (req, res) {
     getLastDate.getLastDateInPreTest(req, res);
@@ -309,6 +302,15 @@ MongoClient.connect(connetToZeroHoneyMongoDb, function (err, client) {
   });
 
   // 가장최신 사전평가를 불러오는 함수
+
+  // ECC REST API 통신
+  app.get("*", function (req, res) {
+    res.sendFile(path.join(__dirname, "build/index.html"));
+  });
+
+  // ----------------------------------------------------------------post----------------------------------------------------------------------------------------//
+
+
 
   app.post("/enroll", (req, res) => {
     const tem = req.body.data;
@@ -341,7 +343,7 @@ MongoClient.connect(connetToZeroHoneyMongoDb, function (err, client) {
   // 사후평가 저장하는 함수
 
   app.post("/putPostEccData", function (request, response) {
-    const { date ,uid} = reqest.body;
+    const { date ,uid} = request.body;
     dbEccEvaluationData
       .collection("PostTest")
       .insertOne(request.body, function (err, result) {
