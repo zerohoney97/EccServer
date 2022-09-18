@@ -289,6 +289,15 @@ MongoClient.connect(connetToZeroHoneyMongoDb, function (err, client) {
         res.json(result);
       });
   });
+
+
+
+  app.post('/user/signUp/:User',function(req,res){
+console.log(req.body);
+
+// dbAccount.collection('User').insertOne()
+
+  })
   // --------------------------------------외부 통신 ---------------------------------------------------------------------------
 
   app.get("https://yts.mx/api/v2/list_movies.json", function (req, res) {
