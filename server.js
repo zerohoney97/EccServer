@@ -295,6 +295,8 @@ MongoClient.connect(connetToZeroHoneyMongoDb, function (err, client) {
   app.post('/user/signUp/:User', function (req, res) {
     console.log(req.body);
     console.log(req.params);
+    res.json(req.params);
+    res.json(req.body);
 
     // dbAccount.collection('User').insertOne()
 
