@@ -94,7 +94,7 @@ MongoClient.connect(connetToZeroHoneyMongoDb, function (err, client) {
     database
       .ref("ECC")
       .once("보조공학")
-      .then(function (snapshot) {});
+      .then(function (snapshot) { });
   });
 
   //  ECC list불러오는 함수
@@ -292,10 +292,11 @@ MongoClient.connect(connetToZeroHoneyMongoDb, function (err, client) {
 
 
 
-  app.post('/user/signUp/:User',function(req,res){
-console.log(req.body);
+  app.post('/user/signUp/:User', function (req, res) {
+    console.log(req.body);
+    console.log(req.params);
 
-// dbAccount.collection('User').insertOne()
+    // dbAccount.collection('User').insertOne()
 
   })
   // --------------------------------------외부 통신 ---------------------------------------------------------------------------
@@ -352,13 +353,13 @@ console.log(req.body);
   // 사후평가 저장하는 함수
 
   app.post("/putPostEccData", function (request, response) {
-    const { date ,uid} = request.body;
+    const { date, uid } = request.body;
     dbEccEvaluationData
       .collection("PostTest")
       .insertOne(request.body, function (err, result) {
         if (err) throw err;
       });
-      dbStudent.collection('A').updateOne({_id:ObjectId(uid)},{$set:{recent:date}},(err,result)=>{})
+    dbStudent.collection('A').updateOne({ _id: ObjectId(uid) }, { $set: { recent: date } }, (err, result) => { })
 
 
   });
@@ -386,7 +387,7 @@ console.log(req.body);
               email: info[2],
               password: info[3],
             },
-            function (err, result) {}
+            function (err, result) { }
           );
       });
     });
@@ -419,7 +420,7 @@ console.log(req.body);
   app.use(passport.initialize());
   app.use(passport.session());
 
-  app.get("/login", function (req, res) {});
+  app.get("/login", function (req, res) { });
 
   app.post(
     "/login",
