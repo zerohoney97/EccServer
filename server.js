@@ -94,7 +94,7 @@ MongoClient.connect(connetToZeroHoneyMongoDb, function (err, client) {
     database
       .ref("ECC")
       .once("보조공학")
-      .then(function (snapshot) { });
+      .then(function (snapshot) {});
   });
 
   //  ECC list불러오는 함수
@@ -290,17 +290,108 @@ MongoClient.connect(connetToZeroHoneyMongoDb, function (err, client) {
       });
   });
 
+  //로그인시 회원 정보 넘겨주는 api
+  app.get("/user/signIn/uid", function (req, res) {
+    const { uid } = req.query;
 
+    dbAccount.findOne({ uid: uid }).toArray((err, result) => {
+      if (err) throw err;
 
-  app.post('/user/signUp', function (req, res) {
+      res.json(result);
+    });
+    // 이메일 찾는 api
+    app.get("/user/findEmail", function (req, res) {
+      const { name, birth } = req.query;
+      dbAccount
+        .collection("User")
+        .findOne({ name: name, birth: birth })
+        .toArray((err, result) => {
+          if (err) throw err;
+
+          res.json(result);
+        });
+    });
+  });
+  // 학생 리스트를 전달해주는 api
+  app.get("/category/list/students/Category", function (req, res) {
+    dbStudent
+      .collection("A")
+      .find()
+      .toArray((err, result) => {
+        if (err) throw err;
+
+        res.json(result);
+      });
+  });
+
+  // query로 온 학생의 정보를 전달하는 api
+  app.get("/student", function (req, res) {
+    const { name } = req.query;
+
+    dbStudent
+      .collection("A")
+      .find({ name: name })
+      .toArray((err, result) => {
+        if (err) throw err;
+
+        res.json(result);
+      });
+  });
+
+  // 카테고리(대분류,소분류)정보를 받고 ecc list를 전달하는 api
+  app.get("/checklist/category", function (req, res) {
+    const { level1, level2 } = req.query;
+    console.log(req.query);
+    switch (level1) {
+      case "보조공학":
+        dbEccList
+          .collection("List")
+          .find({ 보조공학:{$exists:true} })
+          .toArray((err, result) => {
+            if (err) throw err;
+            console.log(result);
+            res.json(result);
+          });
+        break;
+      case "점자":
+        dbEccList
+          .collection("List")
+          .find({ 점자: {$exists:true} })
+          .toArray((err, result) => {
+            if (err) throw err;
+            res.json(result);
+          });
+        break;
+      case "보행":
+        dbEccList
+          .collection("List")
+          .find({ 보행: {$exists:true}  })
+          .toArray((err, result) => {
+            if (err) throw err;
+            res.json(result);
+          });
+        break;
+      case "일상생활기술":
+        dbEccList
+          .collection("List")
+          .find({ 일상생활기술: {$exists:true}  })
+          .toArray((err, result) => {
+            if (err) throw err;
+            res.json(result);
+          });
+        break;
+    }
+  });
+
+  app.post("/user/signUp", function (req, res) {
     console.log(req.body);
     console.log(req.params);
     res.json(req.params);
     res.json(req.body);
 
     // dbAccount.collection('User').insertOne()
+  });
 
-  })
   // --------------------------------------외부 통신 ---------------------------------------------------------------------------
 
   app.get("https://yts.mx/api/v2/list_movies.json", function (req, res) {
@@ -321,8 +412,6 @@ MongoClient.connect(connetToZeroHoneyMongoDb, function (err, client) {
   });
 
   // ----------------------------------------------------------------post----------------------------------------------------------------------------------------//
-
-
 
   app.post("/enroll", (req, res) => {
     const tem = req.body.data;
@@ -361,9 +450,13 @@ MongoClient.connect(connetToZeroHoneyMongoDb, function (err, client) {
       .insertOne(request.body, function (err, result) {
         if (err) throw err;
       });
-    dbStudent.collection('A').updateOne({ _id: ObjectId(uid) }, { $set: { recent: date } }, (err, result) => { })
-
-
+    dbStudent
+      .collection("A")
+      .updateOne(
+        { _id: ObjectId(uid) },
+        { $set: { recent: date } },
+        (err, result) => {}
+      );
   });
 
   // 사후평가 저장하는 함수
@@ -380,17 +473,15 @@ MongoClient.connect(connetToZeroHoneyMongoDb, function (err, client) {
       bcrypt.hash(info[3], salt, function (err, hashedPassword) {
         if (err) return err;
         info[3] = hashedPassword;
-        dbAccount
-          .collection("User")
-          .insertOne(
-            {
-              name: info[0],
-              birth: info[1],
-              email: info[2],
-              password: info[3],
-            },
-            function (err, result) { }
-          );
+        dbAccount.collection("User").insertOne(
+          {
+            name: info[0],
+            birth: info[1],
+            email: info[2],
+            password: info[3],
+          },
+          function (err, result) {}
+        );
       });
     });
     res.redirect("/");
@@ -422,7 +513,7 @@ MongoClient.connect(connetToZeroHoneyMongoDb, function (err, client) {
   app.use(passport.initialize());
   app.use(passport.session());
 
-  app.get("/login", function (req, res) { });
+  app.get("/login", function (req, res) {});
 
   app.post(
     "/login",
