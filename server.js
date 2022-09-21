@@ -226,6 +226,16 @@ MongoClient.connect(connetToZeroHoneyMongoDb, function (err, client) {
       });
   });
 
+  // 로그인한 선생님의 정보 불러오기
+  app.get("/getTeacherInformation", function (req, res) {
+    const { uid } = req.query;
+    dbAccount.collection("User").findOne({ uid: uid }, (err, result) => {
+      res.send(result);
+    });
+  });
+
+  // 로그인한 선생님의 정보 불러오기
+
   // 선생님들이 관리하는 학생들 명단 불러오기
   app.get("/getStudentInformationByTeacher", function (req, res) {
     const { data } = req.query;
@@ -351,6 +361,10 @@ MongoClient.connect(connetToZeroHoneyMongoDb, function (err, client) {
         console.log(result[0][level1][level2]);
         res.json(sendData);
       });
+  });
+
+  app.get("/checklist/history/list/post", function (req, res) {
+    const [startDate, endDate] = req.query;
   });
 
   app.post("/user/signUp", function (req, res) {
