@@ -342,45 +342,15 @@ MongoClient.connect(connetToZeroHoneyMongoDb, function (err, client) {
   app.get("/checklist/category", function (req, res) {
     const { level1, level2 } = req.query;
     console.log(req.query);
-    switch (level1) {
-      case "보조공학":
-        dbEccList
-          .collection("List")
-          .find({ 보조공학:{$exists:true} })
-          .toArray((err, result) => {
-            if (err) throw err;
-            console.log(result);
-            res.json(result);
-          });
-        break;
-      case "점자":
-        dbEccList
-          .collection("List")
-          .find({ 점자: {$exists:true} })
-          .toArray((err, result) => {
-            if (err) throw err;
-            res.json(result);
-          });
-        break;
-      case "보행":
-        dbEccList
-          .collection("List")
-          .find({ 보행: {$exists:true}  })
-          .toArray((err, result) => {
-            if (err) throw err;
-            res.json(result);
-          });
-        break;
-      case "일상생활기술":
-        dbEccList
-          .collection("List")
-          .find({ 일상생활기술: {$exists:true}  })
-          .toArray((err, result) => {
-            if (err) throw err;
-            res.json(result);
-          });
-        break;
-    }
+    dbEccList
+      .collection("List")
+      .find({ [level1]: { $exists: true } })
+      .toArray((err, result) => {
+        if (err) throw err;
+        const sendData = result[0][level1][level2];
+        console.log(result[0][level1][level2]);
+        res.json(sendData);
+      });
   });
 
   app.post("/user/signUp", function (req, res) {
