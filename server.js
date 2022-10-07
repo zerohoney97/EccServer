@@ -407,6 +407,7 @@ MongoClient.connect(connetToZeroHoneyMongoDb, function (err, client) {
 
   // 사전평가 저장하는 함수
   app.post("/putPreEccData", (req, res) => {
+    console.log(req.body);
     dbEccEvaluationData
       .collection("PreTest")
       .insertOne(req.body, function (err, result) {
@@ -428,6 +429,8 @@ MongoClient.connect(connetToZeroHoneyMongoDb, function (err, client) {
   // 사후평가 저장하는 함수
 
   app.post("/putPostEccData", function (request, response) {
+    console.log(request.body);
+
     const { date, uid } = request.body;
     dbEccEvaluationData
       .collection("PostTest")
@@ -448,7 +451,7 @@ MongoClient.connect(connetToZeroHoneyMongoDb, function (err, client) {
   // 회원가입 메소드
   app.post("/doingSignUp", (req, res) => {
     res.header("Access-Control-Allow-Origin", "*");
-
+    console.log(req.body);
     userInformation = req.body.user;
     // split으로 쪼개서 각각 대입
     let info = userInformation.split("___");
