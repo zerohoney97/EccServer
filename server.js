@@ -336,11 +336,13 @@ MongoClient.connect(connetToZeroHoneyMongoDb, function (err, client) {
 
   // query로 온 학생의 정보를 전달하는 api
   app.get("/student", function (req, res) {
-    const { name } = req.query;
+    const { name, birth } = req.query;
+    const findQuery = "name: "+name;
+    if(birth!=null) {findQuery = "name: "+name+", birth: "+birth}
 
     dbStudent
       .collection("A")
-      .find({ name: name })
+      .find({ findQuery })
       .toArray((err, result) => {
         if (err) throw err;
 
@@ -567,3 +569,37 @@ MongoClient.connect(connetToZeroHoneyMongoDb, function (err, client) {
 //       });
 //     });
 //   }));
+
+
+  // 그래프 c의 갯수
+  app.get("/getStudentCCount", function (req, res) {
+    const { uid } = req.query;
+    dbEccEvaluationData
+      .collection("PostTest")
+      .aggregate({ $match : { uid : uid, "result.score":"C" } },
+                 { $group: { _id: {"content":"$result.content", "id":"$_id", "date":"$date"}, count: { $sum: 1 } } })
+      .toArray(function (err, result) {
+        if (err) throw err;
+
+        res.send(result);
+      });
+  });
+  // 그래프 c의 갯수
+
+  // 문항당 C의 변화량
+  app.get("/getCategoryCCountChange", function (req, res) {
+    let { uid, level1, level2 } = req.query;
+    dbEccEvaluationData
+      .collection("PostTest")
+      .aggregate({ $match : { uid : uid, "result.score":"C" }, level1 : level1, level2 : level2 },
+                 { $group: { _id: {"bigCategory":"$bigCategory", "smallCategory":"$smallCategory", "content":"$result.content", "id":"$_id", "date":"$date"}, count: { $sum: 1 } } })
+      .toArray(function (err, result) {
+        if (err) throw err;
+
+        res.send(result);
+      });
+  });
+  // 문항당 C의 변화량
+
+
+  
