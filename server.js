@@ -9,7 +9,7 @@ const bcrypt = require("bcrypt");
 const axios = require("axios");
 const getLastDate = require("./getLastDate");
 const cors = require("cors");
-const {ObjectId} = require("mongodb");
+const { ObjectId } = require("mongodb");
 require("dotenv").config();
 
 let bookFloorList,
@@ -104,115 +104,24 @@ MongoClient.connect(connetToZeroHoneyMongoDb, function (err, client) {
     var EccList = dbEccList.collection("List");
     const { data } = req.query;
     const dataArray = data.split("/");
-    if (parseInt(dataArray[0]) === 0) {
-      EccList.find({ _id: ObjectId("62cbff16c405696e9086655c") }).toArray(
-        (err, result) => {
-          switch (parseInt(dataArray[1])) {
-            case 0:
-              getEccList = result[0].보조공학.책마루;
-              break;
-            case 1:
-              getEccList = result[0].보조공학.OCR;
-              break;
-            case 2:
-              getEccList = result[0].보조공학.데이지플레이어;
-              break;
-            case 4:
-              getEccList = result[0].보조공학.스마트기기활용;
-              break;
-            case 5:
-              getEccList = result[0].보조공학.스크린리더;
-              break;
-            case 6:
-              getEccList = result[0].보조공학.인터넷활용;
-              break;
-            case 7:
-              getEccList = result[0].보조공학.전자교재;
-              break;
-            case 8:
-              getEccList = result[0].보조공학.컴퓨터및프로그램;
-              break;
-            case 9:
-              getEccList = result[0].보조공학.한글및오피스;
-              break;
-          }
-          res.send(getEccList);
-        }
-      );
-    } else if (parseInt(dataArray[0]) === 1) {
-      EccList.find({ _id: ObjectId("62cbffc9c405696e9086a00c") }).toArray(
-        (err, result) => {
-          switch (parseInt(dataArray[1])) {
-            case 0:
-              getEccList = result[0].보행.보행체크리스트;
+    EccList.find().toArray((err, result) => {
+      const bigCategory = dataArray[0];
+      const smallCategory = dataArray[1];
 
-              break;
-          }
-          res.send(getEccList);
-        }
-      );
-    } else if (parseInt(dataArray[0]) === 3) {
-      EccList.find({ _id: ObjectId("62cc000ec405696e9086b6d5") }).toArray(
-        (err, result) => {
-          switch (parseInt(dataArray[1])) {
-            case 0:
-              getEccList = result[0].일상생활기술.책마루;
-              break;
-            case 1:
-              getEccList = result[0].일상생활기술.건강과안전;
-              break;
-            case 2:
-              getEccList = result[0].일상생활기술.시간관리;
-              break;
-            case 3:
-              getEccList = result[0].일상생활기술.식생활;
-              break;
-            case 4:
-              getEccList = result[0].일상생활기술.신변처리;
-              break;
-            case 5:
-              getEccList = result[0].일상생활기술.의생활;
-              break;
-            case 6:
-              getEccList = result[0].일상생활기술.자기주장및보호;
-              break;
-            case 7:
-              getEccList = result[0].일상생활기술.전화기술;
-              break;
-            case 8:
-              getEccList = result[0].일상생활기술.청소기술;
-              break;
-            case 8:
-              getEccList = result[0].일상생활기술.화폐활용;
-              break;
-          }
-          res.send(getEccList);
-        }
-      );
-    } else {
-      EccList.find({ _id: ObjectId("62cbff66c405696e90867f5a") }).toArray(
-        (err, result) => {
-          switch (parseInt(dataArray[1])) {
-            case 0:
-              getEccList = result[0].점자.기호점자;
-              break;
-            case 2:
-              getEccList = result[0].점자.영어점자;
-              break;
-            case 3:
-              getEccList = result[0].점자.점자의기초;
-              break;
-            case 4:
-              getEccList = result[0].점자.촉각훈련;
-              break;
-            case 5:
-              getEccList = result[0].점자.한글점자;
-              break;
-          }
-          res.send(getEccList);
-        }
-      );
-    }
+      if (bigCategory === "보조공학") {
+        getEccList = result[0][bigCategory][smallCategory];
+        res.send(getEccList);
+      } else if (bigCategory === "점자") {
+        getEccList = result[1][bigCategory][smallCategory];
+        res.send(getEccList);
+      } else if (bigCategory === "보행") {
+        getEccList = result[2][bigCategory][smallCategory];
+        res.send(getEccList);
+      } else {
+        getEccList = result[3][bigCategory][smallCategory];
+        res.send(getEccList);
+      }
+    });
   });
 
   app.get("/getStudentListFromDB", function (req, res) {
@@ -226,6 +135,24 @@ MongoClient.connect(connetToZeroHoneyMongoDb, function (err, client) {
       });
   });
 
+  // 일반 선생님의 정보 불러오기
+  app.get("/getTeacher", function (req, res) {
+    dbAccount
+      .collection("User")
+      .find()
+      .toArray((err, result) => {
+        res.send(result);
+      });
+  });
+  // 이름,생년월일로 특정선생님의 이메일을 찾는 매소드
+  app.get("/getTeacherEmail", function (req, res) {
+    const { name, birth } = req.query;
+    dbAccount
+      .collection("User")
+      .findOne({ name: name, birth: birth }, function (err, result) {
+        res.send(result.email);
+      });
+  });
   // 로그인한 선생님의 정보 불러오기
   app.get("/getTeacherInformation", function (req, res) {
     const { uid } = req.query;
@@ -244,7 +171,6 @@ MongoClient.connect(connetToZeroHoneyMongoDb, function (err, client) {
       .collection("A")
       .find({ uid: data })
       .toArray((err, result) => {
-        console.log(result);
         res.send(result);
       });
   });
@@ -254,13 +180,13 @@ MongoClient.connect(connetToZeroHoneyMongoDb, function (err, client) {
 
   // 사전평가 정보 불러오는 함수
   app.get("/getStudentPreEvaluationData", function (req, res) {
-    let { studentData } = req.query;
+    let { uid } = req.query.studentData;
     dbEccEvaluationData
       .collection("PreTest")
-      .find({ uid: studentData })
+      .find({ uid: uid })
       .toArray(function (err, result) {
         if (err) throw err;
-
+        console.log(result);
         res.send(result);
       });
   });
@@ -268,10 +194,10 @@ MongoClient.connect(connetToZeroHoneyMongoDb, function (err, client) {
 
   // 사후평가 정보 불러오는 함수
   app.get("/getStudentPostEvaluationData", function (req, res) {
-    let { studentData } = req.query;
+    let { uid } = req.query.studentData;
     dbEccEvaluationData
       .collection("PostTest")
-      .find({ uid: studentData })
+      .find({ uid: uid })
       .toArray(function (err, result) {
         if (err) throw err;
 
@@ -323,13 +249,12 @@ MongoClient.connect(connetToZeroHoneyMongoDb, function (err, client) {
     });
   });
   // 학생 리스트를 전달해주는 api
-  app.get("/category/list/students/Category", function (req, res) {
+  app.get("/getStudent", function (req, res) {
     dbStudent
       .collection("A")
       .find()
       .toArray((err, result) => {
         if (err) throw err;
-
         res.json(result);
       });
   });
@@ -337,8 +262,10 @@ MongoClient.connect(connetToZeroHoneyMongoDb, function (err, client) {
   // query로 온 학생의 정보를 전달하는 api
   app.get("/student", function (req, res) {
     const { name, birth } = req.query;
-    const findQuery = "name: "+name;
-    if(birth!=null) {findQuery = "name: "+name+", birth: "+birth}
+    const findQuery = "name: " + name;
+    if (birth != null) {
+      findQuery = "name: " + name + ", birth: " + birth;
+    }
 
     dbStudent
       .collection("A")
@@ -353,14 +280,12 @@ MongoClient.connect(connetToZeroHoneyMongoDb, function (err, client) {
   // 카테고리(대분류,소분류)정보를 받고 ecc list를 전달하는 api
   app.get("/checklist/category", function (req, res) {
     const { level1, level2 } = req.query;
-    console.log(req.query);
     dbEccList
       .collection("List")
       .find({ [level1]: { $exists: true } })
       .toArray((err, result) => {
         if (err) throw err;
         const sendData = result[0][level1][level2];
-        console.log(result[0][level1][level2]);
         res.json(sendData);
       });
   });
@@ -370,8 +295,6 @@ MongoClient.connect(connetToZeroHoneyMongoDb, function (err, client) {
   });
 
   app.post("/user/signUp", function (req, res) {
-    console.log(req.body);
-    console.log(req.params);
     res.json(req.params);
     res.json(req.body);
 
@@ -380,9 +303,7 @@ MongoClient.connect(connetToZeroHoneyMongoDb, function (err, client) {
 
   // --------------------------------------외부 통신 ---------------------------------------------------------------------------
 
-  app.get("https://yts.mx/api/v2/list_movies.json", function (req, res) {
-    console.log(res);
-  });
+  app.get("https://yts.mx/api/v2/list_movies.json", function (req, res) {});
 
   // 가장최신 사전평가를 불러오는 함수
   app.get("/getLastPretestData", function (req, res) {
@@ -399,17 +320,17 @@ MongoClient.connect(connetToZeroHoneyMongoDb, function (err, client) {
 
   // ----------------------------------------------------------------post----------------------------------------------------------------------------------------//
 
-  app.post("/enroll", (req, res) => {
-    const tem = req.body.data;
-
-    Add.addStudent(tem, res);
+  // 학생을 등록하는 메소드
+  app.post("/addStudent", (req, res) => {
+    dbStudent.collection("A").insertOne(req.body, function (err, result) {
+      if (err) throw err;
+    });
 
     // db.collection('test_apple').ubdateOne({},{})
   });
 
   // 사전평가 저장하는 함수
   app.post("/putPreEccData", (req, res) => {
-    console.log(req.body);
     dbEccEvaluationData
       .collection("PreTest")
       .insertOne(req.body, function (err, result) {
@@ -431,8 +352,6 @@ MongoClient.connect(connetToZeroHoneyMongoDb, function (err, client) {
   // 사후평가 저장하는 함수
 
   app.post("/putPostEccData", function (request, response) {
-    console.log(request.body);
-
     const { date, uid } = request.body;
     dbEccEvaluationData
       .collection("PostTest")
@@ -452,28 +371,25 @@ MongoClient.connect(connetToZeroHoneyMongoDb, function (err, client) {
 
   // 회원가입 메소드
   app.post("/doingSignUp", (req, res) => {
-    res.header("Access-Control-Allow-Origin", "*");
     console.log(req.body);
-    userInformation = req.body.user;
+    res.header("Access-Control-Allow-Origin", "*");
+    userInformation = req.body;
     // split으로 쪼개서 각각 대입
-    let info = userInformation.split("___");
     bcrypt.genSalt(10, function (err, salt) {
       if (err) return err;
-      bcrypt.hash(info[3], salt, function (err, hashedPassword) {
-        if (err) return err;
-        info[3] = hashedPassword;
-        dbAccount.collection("User").insertOne(
-          {
-            name: info[0],
-            birth: info[1],
-            email: info[2],
-            password: info[3],
-          },
-          function (err, result) {}
-        );
-      });
+      bcrypt.hash(
+        userInformation.password,
+        salt,
+        function (err, hashedPassword) {
+          if (err) return err;
+          userInformation.password = hashedPassword;
+          dbAccount
+            .collection("User")
+            .insertOne(req.body, function (err, result) {});
+        }
+      );
     });
-    res.redirect("/");
+    res.redirect("/signIn");
   });
 
   // 회원가입 실패시 새로고침 메소드
@@ -534,7 +450,6 @@ MongoClient.connect(connetToZeroHoneyMongoDb, function (err, client) {
             if (!res)
               return done(null, false, { message: "존재하지않는 아이디요" });
             bcrypt.compare(password, res.password).then((isMatch) => {
-              console.log(password, res.password);
               if (isMatch) {
                 return done(null, res);
               } else {
@@ -570,36 +485,56 @@ MongoClient.connect(connetToZeroHoneyMongoDb, function (err, client) {
 //     });
 //   }));
 
+// 그래프 c의 갯수
+app.get("/getStudentCCount", function (req, res) {
+  const { uid } = req.query;
+  dbEccEvaluationData
+    .collection("PostTest")
+    .aggregate(
+      { $match: { uid: uid, "result.score": "C" } },
+      {
+        $group: {
+          _id: { content: "$result.content", id: "$_id", date: "$date" },
+          count: { $sum: 1 },
+        },
+      }
+    )
+    .toArray(function (err, result) {
+      if (err) throw err;
 
-  // 그래프 c의 갯수
-  app.get("/getStudentCCount", function (req, res) {
-    const { uid } = req.query;
-    dbEccEvaluationData
-      .collection("PostTest")
-      .aggregate({ $match : { uid : uid, "result.score":"C" } },
-                 { $group: { _id: {"content":"$result.content", "id":"$_id", "date":"$date"}, count: { $sum: 1 } } })
-      .toArray(function (err, result) {
-        if (err) throw err;
+      res.send(result);
+    });
+});
+// 그래프 c의 갯수
 
-        res.send(result);
-      });
-  });
-  // 그래프 c의 갯수
+// 문항당 C의 변화량
+app.get("/getCategoryCCountChange", function (req, res) {
+  let { uid, level1, level2 } = req.query;
+  dbEccEvaluationData
+    .collection("PostTest")
+    .aggregate(
+      {
+        $match: { uid: uid, "result.score": "C" },
+        level1: level1,
+        level2: level2,
+      },
+      {
+        $group: {
+          _id: {
+            bigCategory: "$bigCategory",
+            smallCategory: "$smallCategory",
+            content: "$result.content",
+            id: "$_id",
+            date: "$date",
+          },
+          count: { $sum: 1 },
+        },
+      }
+    )
+    .toArray(function (err, result) {
+      if (err) throw err;
 
-  // 문항당 C의 변화량
-  app.get("/getCategoryCCountChange", function (req, res) {
-    let { uid, level1, level2 } = req.query;
-    dbEccEvaluationData
-      .collection("PostTest")
-      .aggregate({ $match : { uid : uid, "result.score":"C" }, level1 : level1, level2 : level2 },
-                 { $group: { _id: {"bigCategory":"$bigCategory", "smallCategory":"$smallCategory", "content":"$result.content", "id":"$_id", "date":"$date"}, count: { $sum: 1 } } })
-      .toArray(function (err, result) {
-        if (err) throw err;
-
-        res.send(result);
-      });
-  });
-  // 문항당 C의 변화량
-
-
-  
+      res.send(result);
+    });
+});
+// 문항당 C의 변화량
