@@ -146,6 +146,8 @@ MongoClient.connect(connetToZeroHoneyMongoDb, function (err, client) {
   });
   // 이름,생년월일로 특정선생님의 이메일을 찾는 매소드
   app.get("/getTeacherEmail", function (req, res) {
+    res.setHeader("Access-Control-Allow-Origin", "*");
+
     const { name, birth } = req.query;
     dbAccount
       .collection("User")
@@ -155,6 +157,8 @@ MongoClient.connect(connetToZeroHoneyMongoDb, function (err, client) {
   });
   // 로그인한 선생님의 정보 불러오기
   app.get("/getTeacherInformation", function (req, res) {
+    res.setHeader("Access-Control-Allow-Origin", "*");
+
     const { uid } = req.query;
     dbAccount.collection("User").findOne({ uid: uid }, (err, result) => {
       res.send(result);
@@ -165,6 +169,8 @@ MongoClient.connect(connetToZeroHoneyMongoDb, function (err, client) {
 
   // 선생님들이 관리하는 학생들 명단 불러오기
   app.get("/getStudentInformationByTeacher", function (req, res) {
+    res.setHeader("Access-Control-Allow-Origin", "*");
+
     const { data } = req.query;
 
     dbStudent
@@ -180,6 +186,8 @@ MongoClient.connect(connetToZeroHoneyMongoDb, function (err, client) {
 
   // 사전평가 정보 불러오는 함수
   app.get("/getStudentPreEvaluationData", function (req, res) {
+    res.setHeader("Access-Control-Allow-Origin", "*");
+
     let { uid } = req.query.studentData;
     dbEccEvaluationData
       .collection("PreTest")
@@ -194,6 +202,8 @@ MongoClient.connect(connetToZeroHoneyMongoDb, function (err, client) {
 
   // 사후평가 정보 불러오는 함수
   app.get("/getStudentPostEvaluationData", function (req, res) {
+    res.setHeader("Access-Control-Allow-Origin", "*");
+
     let { uid } = req.query.studentData;
     dbEccEvaluationData
       .collection("PostTest")
