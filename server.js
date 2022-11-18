@@ -163,6 +163,7 @@ MongoClient.connect(connetToZeroHoneyMongoDb, function (err, client) {
 
     const { uid } = req.query;
     dbAccount.collection("User").findOne({ uid: uid }, (err, result) => {
+      console.log(result);
       res.send(result);
     });
   });
@@ -190,10 +191,10 @@ MongoClient.connect(connetToZeroHoneyMongoDb, function (err, client) {
   app.get("/getStudentPreEvaluationData", function (req, res) {
     res.setHeader("Access-Control-Allow-Origin", "*");
 
-    let { uid } = req.query.studentData;
+    let { studentUid } = req.query.studentData;
     dbEccEvaluationData
       .collection("PreTest")
-      .find({ uid: uid })
+      .find({ studentUid: studentUid })
       .toArray(function (err, result) {
         if (err) throw err;
         console.log(result);
@@ -205,11 +206,11 @@ MongoClient.connect(connetToZeroHoneyMongoDb, function (err, client) {
   // 사후평가 정보 불러오는 함수
   app.get("/getStudentPostEvaluationData", function (req, res) {
     res.setHeader("Access-Control-Allow-Origin", "*");
+    let { studentUid } = req.query.studentData;
 
-    let { uid } = req.query.studentData;
     dbEccEvaluationData
       .collection("PostTest")
-      .find({ uid: uid })
+      .find({ studentUid: studentUid })
       .toArray(function (err, result) {
         if (err) throw err;
 
@@ -359,12 +360,20 @@ MongoClient.connect(connetToZeroHoneyMongoDb, function (err, client) {
   // 사전평가 저장하는 함수
   app.post("/putPreEccData", (req, res) => {
     res.setHeader("Access-Control-Allow-Origin", "*");
+    const { date, studentUid } = request.body;
 
     dbEccEvaluationData
       .collection("PreTest")
       .insertOne(req.body, function (err, result) {
         if (err) throw err;
       });
+      dbStudent
+      .collection("A")
+      .updateOne(
+        { _id: ObjectId(studentUid) },
+        { $set: { recent: date } },
+        (err, result) => {}
+      );
 
     // 각 카테고리의 최신 평가 시간 갱신 메소드
 
@@ -381,9 +390,9 @@ MongoClient.connect(connetToZeroHoneyMongoDb, function (err, client) {
   // 사후평가 저장하는 함수
 
   app.post("/putPostEccData", function (request, response) {
-    res.setHeader("Access-Control-Allow-Origin", "*");
+    response.setHeader("Access-Control-Allow-Origin", "*");
 
-    const { date, uid } = request.body;
+    const { date, studentUid } = request.body;
     dbEccEvaluationData
       .collection("PostTest")
       .insertOne(request.body, function (err, result) {
@@ -392,7 +401,7 @@ MongoClient.connect(connetToZeroHoneyMongoDb, function (err, client) {
     dbStudent
       .collection("A")
       .updateOne(
-        { _id: ObjectId(uid) },
+        { _id: ObjectId(studentUid) },
         { $set: { recent: date } },
         (err, result) => {}
       );
