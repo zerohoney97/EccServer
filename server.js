@@ -57,6 +57,20 @@ MongoClient.connect(connetToZeroHoneyMongoDb, function (err, client) {
   // json 파일 해석
   app.use(express.json());
   // json 파일 해석
+  // 헤더 설정
+  app.use(function (req, res, next) {
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header(
+      "Access-Control-Allow-Methods",
+      "GET,HEAD,OPTIONS,POST,PUT,DELETE"
+    );
+    res.header(
+      "Access-Control-Allow-Headers",
+      "Origin, X-Requested-With, Content-Type, Accept, Authorization"
+    );
+    next();
+  });
+  // 헤더 설정
 
   // express 미들웨어 관리
 
@@ -254,7 +268,7 @@ MongoClient.connect(connetToZeroHoneyMongoDb, function (err, client) {
     });
     // 이메일 찾는 api
     app.get("/user/findEmail", function (req, res) {
-    res.setHeader("Access-Control-Allow-Origin", "*");
+      res.setHeader("Access-Control-Allow-Origin", "*");
 
       const { name, birth } = req.query;
       dbAccount
@@ -302,7 +316,6 @@ MongoClient.connect(connetToZeroHoneyMongoDb, function (err, client) {
 
   // 카테고리(대분류,소분류)정보를 받고 ecc list를 전달하는 api
   app.get("/checklist/category", function (req, res) {
-
     const { level1, level2 } = req.query;
     dbEccList
       .collection("List")
@@ -367,7 +380,7 @@ MongoClient.connect(connetToZeroHoneyMongoDb, function (err, client) {
       .insertOne(req.body, function (err, result) {
         if (err) throw err;
       });
-      dbStudent
+    dbStudent
       .collection("A")
       .updateOne(
         { _id: ObjectId(studentUid) },
