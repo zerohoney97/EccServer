@@ -373,7 +373,7 @@ MongoClient.connect(connetToZeroHoneyMongoDb, function (err, client) {
   // 사전평가 저장하는 함수
   app.post("/putPreEccData", (req, res) => {
     res.setHeader("Access-Control-Allow-Origin", "*");
-    const { date, studentUid } = request.body;
+    const { date, studentUid } = req.body;
 
     dbEccEvaluationData
       .collection("PreTest")
