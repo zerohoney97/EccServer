@@ -139,6 +139,7 @@ MongoClient.connect(connetToZeroHoneyMongoDb, function (err, client) {
   });
 
   app.get("/getStudentListFromDB", function (req, res) {
+    res.header("Access-Control-Allow-Origin", "*");
     
     dbStudent
       .collection("A")
@@ -152,6 +153,7 @@ MongoClient.connect(connetToZeroHoneyMongoDb, function (err, client) {
   // 일반 선생님의 정보 불러오기
   app.get("/getTeacher", function (req, res) {
     
+    res.header("Access-Control-Allow-Origin", "*");
 
     dbAccount
       .collection("User")
@@ -162,6 +164,7 @@ MongoClient.connect(connetToZeroHoneyMongoDb, function (err, client) {
   });
   // 이름,생년월일로 특정선생님의 이메일을 찾는 매소드
   app.get("/getTeacherEmail", function (req, res) {
+    res.header("Access-Control-Allow-Origin", "*");
     
 
     const { name, birth } = req.query;
@@ -173,6 +176,7 @@ MongoClient.connect(connetToZeroHoneyMongoDb, function (err, client) {
   });
   // 로그인한 선생님의 정보 불러오기
   app.get("/getTeacherInformation", function (req, res) {
+    res.header("Access-Control-Allow-Origin", "*");
     
 
     const { uid } = req.query;
@@ -187,6 +191,7 @@ MongoClient.connect(connetToZeroHoneyMongoDb, function (err, client) {
   // 선생님들이 관리하는 학생들 명단 불러오기
   app.get("/getStudentInformationByTeacher", function (req, res) {
     
+    res.header("Access-Control-Allow-Origin", "*");
 
     const { data } = req.query;
 
@@ -203,6 +208,7 @@ MongoClient.connect(connetToZeroHoneyMongoDb, function (err, client) {
 
   // 사전평가 정보 불러오는 함수
   app.get("/getStudentPreEvaluationData", function (req, res) {
+    res.header("Access-Control-Allow-Origin", "*");
     
 
     let { studentUid } = req.query.studentData;
@@ -219,6 +225,7 @@ MongoClient.connect(connetToZeroHoneyMongoDb, function (err, client) {
 
   // 사후평가 정보 불러오는 함수
   app.get("/getStudentPostEvaluationData", function (req, res) {
+    res.header("Access-Control-Allow-Origin", "*");
     
     let { studentUid } = req.query.studentData;
 
@@ -246,6 +253,7 @@ MongoClient.connect(connetToZeroHoneyMongoDb, function (err, client) {
 
   app.get("/category/list", function (req, res) {
     
+    res.header("Access-Control-Allow-Origin", "*");
 
     dbEccList
       .collection("List")
@@ -257,6 +265,7 @@ MongoClient.connect(connetToZeroHoneyMongoDb, function (err, client) {
 
   //로그인시 회원 정보 넘겨주는 api
   app.get("/user/signIn/uid", function (req, res) {
+    res.header("Access-Control-Allow-Origin", "*");
     
 
     const { uid } = req.query;
@@ -268,6 +277,7 @@ MongoClient.connect(connetToZeroHoneyMongoDb, function (err, client) {
     });
     // 이메일 찾는 api
     app.get("/user/findEmail", function (req, res) {
+    res.header("Access-Control-Allow-Origin", "*");
       
 
       const { name, birth } = req.query;
@@ -283,6 +293,7 @@ MongoClient.connect(connetToZeroHoneyMongoDb, function (err, client) {
   });
   // 학생 리스트를 전달해주는 api
   app.get("/getStudent", function (req, res) {
+    res.header("Access-Control-Allow-Origin", "*");
     
 
     dbStudent
@@ -297,6 +308,7 @@ MongoClient.connect(connetToZeroHoneyMongoDb, function (err, client) {
   // query로 온 학생의 정보를 전달하는 api
   app.get("/student", function (req, res) {
     
+    res.header("Access-Control-Allow-Origin", "*");
 
     const { name, birth } = req.query;
     const findQuery = "name: " + name;
@@ -316,6 +328,8 @@ MongoClient.connect(connetToZeroHoneyMongoDb, function (err, client) {
 
   // 카테고리(대분류,소분류)정보를 받고 ecc list를 전달하는 api
   app.get("/checklist/category", function (req, res) {
+    res.header("Access-Control-Allow-Origin", "*");
+
     const { level1, level2 } = req.query;
     dbEccList
       .collection("List")
@@ -328,10 +342,14 @@ MongoClient.connect(connetToZeroHoneyMongoDb, function (err, client) {
   });
 
   app.get("/checklist/history/list/post", function (req, res) {
+    res.header("Access-Control-Allow-Origin", "*");
+
     const [startDate, endDate] = req.query;
   });
 
   app.post("/user/signUp", function (req, res) {
+    res.header("Access-Control-Allow-Origin", "*");
+
     res.json(req.params);
     res.json(req.body);
 
@@ -362,6 +380,7 @@ MongoClient.connect(connetToZeroHoneyMongoDb, function (err, client) {
   // 학생을 등록하는 메소드
   app.post("/addStudent", (req, res) => {
     
+    res.header("Access-Control-Allow-Origin", "*");
 
     dbStudent.collection("A").insertOne(req.body, function (err, result) {
       if (err) throw err;
@@ -372,6 +391,7 @@ MongoClient.connect(connetToZeroHoneyMongoDb, function (err, client) {
 
   // 사전평가 저장하는 함수
   app.post("/putPreEccData", (req, res) => {
+    res.header("Access-Control-Allow-Origin", "*");
     
     const { date, studentUid } = req.body;
 
@@ -424,6 +444,7 @@ MongoClient.connect(connetToZeroHoneyMongoDb, function (err, client) {
 
   // 회원가입 메소드
   app.post("/doingSignUp", (req, res) => {
+    res.header("Access-Control-Allow-Origin", "*");
     
 
     console.log(req.body);
