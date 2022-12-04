@@ -58,6 +58,9 @@ MongoClient.connect(connetToZeroHoneyMongoDb, function (err, client) {
   app.use(express.json());
   // json 파일 해석
   // 헤더 설정
+  app.use(cors({
+    origin: '*'
+}));
   app.use(function (req, res, next) {
     res.header("Access-Control-Allow-Origin", "*");
     res.header(
