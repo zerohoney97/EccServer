@@ -51,14 +51,15 @@ app.listen(process.env.PORT, (req, res) => {
 // })
 
 // 1.백엔드 2.프론트엔드 3.미들웨어
-
+app.use(function(req, res, next) {
+  res.header("Access-Control-Allow-Origin", "*");
+     res.header("Access-Control-Allow-Headers", "X-Requested-With");
+     res.header("Access-Control-Allow-Methods", "POST, GET, OPTIONS, DELETE");
+     next();
+ });
 app.use(express.static(path.join(__dirname, "public")));
 app.use(express.static(path.join(__dirname, "build")));
-app.use(
-  cors({
-    origin: "*",
-  })
-);
+
 // 맥을 실험한다
 MongoClient.connect(connetToZeroHoneyMongoDb, function (err, client) {
   //  "proxy": "http://localhost:8080"
