@@ -159,6 +159,8 @@ MongoClient.connect(connetToZeroHoneyMongoDb, function (err, client) {
   });
   // 로그인한 선생님의 정보 불러오기
   app.get("/getTeacherInformation", function (req, res) {
+    res.header("Access-Control-Allow-Origin", "*");
+
     const { uid } = req.query;
     dbAccount.collection("User").findOne({ uid: uid }, (err, result) => {
       console.log(result);
