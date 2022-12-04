@@ -23,13 +23,7 @@ let bookFloorList,
   smartPhoneList;
 let base, engBraille, hangeul, symbol, touch;
 let connetToZeroHoneyMongoDb = process.env.DB_URL;
-var allowCrossDomain = function(req, res, next) {
-  res.header('Access-Control-Allow-Origin', 'example.com');
-  res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
-  res.header('Access-Control-Allow-Headers', 'Content-Type');
 
-  next();
-}
 // 맥을 실험한다
 MongoClient.connect(connetToZeroHoneyMongoDb, function (err, client) {
   //  "proxy": "http://localhost:8080"
@@ -53,7 +47,6 @@ MongoClient.connect(connetToZeroHoneyMongoDb, function (err, client) {
 
   // express 미들웨어 관리
 
-  
   // .urlencoded()은 x-www-form-urlencoded형태의 데이터를
   // .json()은 JSON형태의 데이터를 해석
 
@@ -65,18 +58,18 @@ MongoClient.connect(connetToZeroHoneyMongoDb, function (err, client) {
   app.use(express.json());
   // json 파일 해석
   // 헤더 설정
-  // app.use(function (req, res, next) {
-  //   res.header("Access-Control-Allow-Origin", "*");
-  //   res.header(
-  //     "Access-Control-Allow-Methods",
-  //     "GET,HEAD,OPTIONS,POST,PUT,DELETE"
-  //   );
-  //   res.header(
-  //     "Access-Control-Allow-Headers",
-  //     "Origin, X-Requested-With, Content-Type, Accept, Authorization"
-  //   );
-  //   next();
-  // });
+  app.use(function (req, res, next) {
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header(
+      "Access-Control-Allow-Methods",
+      "GET,HEAD,OPTIONS,POST,PUT,DELETE"
+    );
+    res.header(
+      "Access-Control-Allow-Headers",
+      "Origin, X-Requested-With, Content-Type, Accept, Authorization"
+    );
+    next();
+  });
   // 헤더 설정
 
   // express 미들웨어 관리
@@ -181,7 +174,6 @@ MongoClient.connect(connetToZeroHoneyMongoDb, function (err, client) {
   // 로그인한 선생님의 정보 불러오기
   app.get("/getTeacherInformation", function (req, res) {
     
-    res.setHeader("Access-Control-Allow-Origin", "*");
 
     const { uid } = req.query;
     dbAccount.collection("User").findOne({ uid: uid }, (err, result) => {
