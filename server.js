@@ -51,12 +51,8 @@ app.listen(process.env.PORT, (req, res) => {
 // })
 
 // 1.백엔드 2.프론트엔드 3.미들웨어
-app.use(function(req, res, next) {
-  res.header("Access-Control-Allow-Origin", "*");
-     res.header("Access-Control-Allow-Headers", "X-Requested-With");
-     res.header("Access-Control-Allow-Methods", "POST, GET, OPTIONS, DELETE");
-     next();
- });
+
+app.use(cors())
 app.use(express.static(path.join(__dirname, "public")));
 app.use(express.static(path.join(__dirname, "build")));
 
