@@ -53,7 +53,7 @@ MongoClient.connect(connetToZeroHoneyMongoDb, function (err, client) {
 
   // express 미들웨어 관리
 
-
+  
   // .urlencoded()은 x-www-form-urlencoded형태의 데이터를
   // .json()은 JSON형태의 데이터를 해석
 
@@ -102,12 +102,6 @@ MongoClient.connect(connetToZeroHoneyMongoDb, function (err, client) {
   app.use(express.static(path.join(__dirname, "public")));
   app.use(express.static(path.join(__dirname, "build")));
 
-
-  app.all('/*', function(req, res, next) {
-    res.header("Access-Control-Allow-Origin", "*");
-    res.header("Access-Control-Allow-Headers", "X-Requested-With");
-    next();
-  });
   app.get("/", function (req, res) {
     res.sendFile(path.join(__dirname + "/index.html"));
   });
