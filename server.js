@@ -31,25 +31,12 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 // json 파일 해석
 // 헤더 설정
-app.use(function (req, res, next) {
-  res.header("Access-Control-Allow-Origin", "*");
-  res.header(
-    "Access-Control-Allow-Methods",
-    "GET,HEAD,OPTIONS,POST,PUT,DELETE"
-  );
-  res.header(
-    "Access-Control-Allow-Headers",
-    "Origin, X-Requested-With, Content-Type, Accept, Authorization"
-  );
-  next();
-});
+
 // 헤더 설정
 
 // express 미들웨어 관리
 
-http.createServer((req, res) => {
-  res.setHeader("Access-Control-Allow-Origin", "*");
-});
+
 app.listen(process.env.PORT, (req, res) => {
   console.log("성공했구나 이녀석..");
 });
