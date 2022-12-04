@@ -96,12 +96,11 @@ MongoClient.connect(connetToZeroHoneyMongoDb, function (err, client) {
   app.use(express.static(path.join(__dirname, "build")));
 
   app.get("/", function (req, res) {
+    res.header("Access-Control-Allow-Origin", "*");
+
     res.sendFile(path.join(__dirname + "/index.html"));
   });
-  app.get("/", function (요청, 응답) {
-    응답.sendFile(__dirname + "/index.html");
-  });
-
+ 
   // google-site-verification=uR1kEOUbJS60DOSd7pJM70Gpx8YqKfY-jjPk1oY_QUk
   // 파이어베이스 테스트용
   app.post("/testFire", (req, res) => {
