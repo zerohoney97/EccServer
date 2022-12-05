@@ -101,6 +101,10 @@ MongoClient.connect(connetToZeroHoneyMongoDb, function (err, client) {
       .then(function (snapshot) {});
   });
 
+  app.get('/testTemp',(req,res)=>{
+
+    res.send('안녕')
+  })
   //  ECC list불러오는 함수
   app.get("/getEccList", (req, res) => {
     let getEccList;
