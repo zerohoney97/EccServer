@@ -23,15 +23,23 @@ let bookFloorList,
   smartPhoneList;
 let base, engBraille, hangeul, symbol, touch;
 let connetToZeroHoneyMongoDb = process.env.DB_URL;
+  // json 파일 해석
+app.use(express.json());
+  // json 파일을 qs모듈로 사용
+app.use(express.urlencoded({ extended: true }));
+app.use((_, res, next) => {
+  res.set('Access-Control-Allow-Origin', '*'); // or 'localhost:8888'
+  res.set('Access-Control-Allow-Methods', 'PUT,POST,GET,DELETE,OPTIONS');
+  res.set(
+    'Access-Control-Allow-Headers',
+    'Origin, X-Requested-With, Content-Type, Accept'
+  );
+  return next();
+}); // sets headers before routes
 // 헤더 설정
-  app.use(cors());
   // 헤더 설정
   // json 파일을 qs모듈로 사용
-  app.use(express.urlencoded({ extended: true }));
-  // json 파일을 qs모듈로 사용
 
-  // json 파일 해석
-  app.use(express.json());
   // json 파일 해석
 
   // express 미들웨어 관리
