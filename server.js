@@ -23,33 +23,7 @@ let bookFloorList,
   smartPhoneList;
 let base, engBraille, hangeul, symbol, touch;
 let connetToZeroHoneyMongoDb = process.env.DB_URL;
-
-// 맥을 실험한다
-MongoClient.connect('mongodb+srv://zerohoney:e911291!e9@cluster0.wlnrf.mongodb.net/?retryWrites=true&w=majority', function (err, client) {
-  //  "proxy": "http://localhost:8080"
-
-  // node.js
-  // 전역변수
-  var dbAccount = client.db("Account");
-  var dbStudent = client.db("Student");
-  var dbEccList = client.db("EccList");
-  var dbEccEvaluationData = client.db("EccEvaluationData");
-  // 각 폼을 불러와주는 쿼리값
-  // 리스트를 임시보관할 array
-  var tempList;
-
-  // 컬렉션 이름 바꾸는 메소드
-  // MongoClient.connect('mongodb+srv://ecoco97:e911291!e9@eccproject.7wg6l.mongodb.net/EccSubtech?retryWrites=true&w=majority',function (err,client){
-  //     db=client.db('EccSubtech');
-  //     db.collection('form_daisy').rename('form/0/2');
-
-  //     })
-
-  // express 미들웨어 관리
-
-  // .urlencoded()은 x-www-form-urlencoded형태의 데이터를
-  // .json()은 JSON형태의 데이터를 해석
-  // 헤더 설정
+// 헤더 설정
   app.use(cors());
   // 헤더 설정
   // json 파일을 qs모듈로 사용
@@ -84,6 +58,32 @@ MongoClient.connect('mongodb+srv://zerohoney:e911291!e9@cluster0.wlnrf.mongodb.n
     res.sendFile(path.join(__dirname + "/index.html"));
   });
 
+// 맥을 실험한다
+MongoClient.connect('mongodb+srv://zerohoney:e911291!e9@cluster0.wlnrf.mongodb.net/?retryWrites=true&w=majority', function (err, client) {
+  //  "proxy": "http://localhost:8080"
+
+  // node.js
+  // 전역변수
+  var dbAccount = client.db("Account");
+  var dbStudent = client.db("Student");
+  var dbEccList = client.db("EccList");
+  var dbEccEvaluationData = client.db("EccEvaluationData");
+  // 각 폼을 불러와주는 쿼리값
+  // 리스트를 임시보관할 array
+  var tempList;
+
+  // 컬렉션 이름 바꾸는 메소드
+  // MongoClient.connect('mongodb+srv://ecoco97:e911291!e9@eccproject.7wg6l.mongodb.net/EccSubtech?retryWrites=true&w=majority',function (err,client){
+  //     db=client.db('EccSubtech');
+  //     db.collection('form_daisy').rename('form/0/2');
+
+  //     })
+
+  // express 미들웨어 관리
+
+  // .urlencoded()은 x-www-form-urlencoded형태의 데이터를
+  // .json()은 JSON형태의 데이터를 해석
+  
   // google-site-verification=uR1kEOUbJS60DOSd7pJM70Gpx8YqKfY-jjPk1oY_QUk
   // 파이어베이스 테스트용
   app.post("/testFire", (req, res) => {
